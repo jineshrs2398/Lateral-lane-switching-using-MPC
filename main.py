@@ -22,6 +22,7 @@ time_length=constants[15] # duration of the manoeuvre
 t=np.arange(0,time_length+Ts,Ts) # time from 0 to 10 seconds, sample time (Ts=0.1 second)
 r=constants[13]
 f=constants[14]
+PID_switch=constants[17]
 psi_ref,X_ref,Y_ref=support.trajectory_generator(t,r,f)
 sim_length=len(t) # Number of control loop iterations
 refSignals=np.zeros(len(X_ref)*outputs)
@@ -176,7 +177,7 @@ def update_plot(num):
 # Set up the figure properties
 fig_x=16
 fig_y=9
-fig=plt.figure(figsize=(fig_x,fig_y),dpi=120,facecolor=(0.8,0.8,0.8))
+fig=plt.figure(figsize=(fig_x,fig_y),dpi=120)
 n=3
 m=3
 gs=gridspec.GridSpec(n,m)
@@ -184,7 +185,7 @@ gs=gridspec.GridSpec(n,m)
 # Car motion
 
 # Create an object for the motorcycle
-ax0=fig.add_subplot(gs[0,:],facecolor=(0.9,0.9,0.9))
+ax0=fig.add_subplot(gs[0,:])
 
 # Plot the reference trajectory
 ref_trajectory=ax0.plot(X_ref,Y_ref,'b',linewidth=1)
@@ -213,9 +214,9 @@ plt.ylabel('Y-distance [m]',fontsize=15)
 
 
 # Create an object for the motorcycle (zoomed)
-ax1=fig.add_subplot(gs[1,:],facecolor=(0.9,0.9,0.9))
-bbox_props_angle=dict(boxstyle='square',fc=(0.9,0.9,0.9),ec='k',lw='1')
-bbox_props_steer_angle=dict(boxstyle='square',fc=(0.9,0.9,0.9),ec='r',lw='1')
+ax1=fig.add_subplot(gs[1,:])
+bbox_props_angle=dict(boxstyle='square',fc=(1,1,1),ec='k',lw='1')
+bbox_props_steer_angle=dict(boxstyle='square',fc=(1,1,1),ec='r',lw='1')
 
 neutral_line=ax1.plot([-50,50],[0,0],'k',linewidth=1)
 car_1_body,=ax1.plot([],[],'k',linewidth=3)
@@ -233,7 +234,7 @@ yaw_angle_text=ax1.text(25,2,'',size='20',color='k',bbox=bbox_props_angle)
 steer_angle=ax1.text(25,-2.5,'',size='20',color='r',bbox=bbox_props_steer_angle)
 
 # Create the function for the steering wheel
-ax2=fig.add_subplot(gs[2,0],facecolor=(0.9,0.9,0.9))
+ax2=fig.add_subplot(gs[2,0])
 steering_wheel,=ax2.plot([],[],'-r',linewidth=1,label='steering angle [rad]')
 plt.xlim(0,t[-1])
 plt.ylim(np.min(UTotal)-0.1,np.max(UTotal)+0.1)
@@ -242,7 +243,7 @@ plt.grid(True)
 plt.legend(loc='upper right',fontsize='small')
 
 # Create the function for the yaw angle
-ax3=fig.add_subplot(gs[2,1],facecolor=(0.9,0.9,0.9))
+ax3=fig.add_subplot(gs[2,1])
 yaw_angle_reference=ax3.plot(t,psi_ref,'-b',linewidth=1,label='yaw reference [rad]')
 yaw_angle,=ax3.plot([],[],'-r',linewidth=1,label='yaw angle [rad]')
 if PID_switch!=1:
@@ -254,7 +255,7 @@ plt.grid(True)
 plt.legend(loc='upper right',fontsize='small')
 
 # Create the function for the Y-position
-ax4=fig.add_subplot(gs[2,2],facecolor=(0.9,0.9,0.9))
+ax4=fig.add_subplot(gs[2,2])
 Y_position_reference=ax4.plot(t,Y_ref,'-b',linewidth=1,label='Y - reference [m]')
 Y_position,=ax4.plot([],[],'-r',linewidth=1,label='Y - position [m]')
 if PID_switch!=1:
